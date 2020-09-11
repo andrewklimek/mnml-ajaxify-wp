@@ -43,10 +43,8 @@ xhr.send();
  * Setup JavaScript
  */
 add_action( 'wp_enqueue_scripts', function() {
-	
-	wp_enqueue_script( 'mnmlajax', plugin_dir_url( __FILE__ ) . 'js.js', null, null, true );
-
-});
+	wp_enqueue_script( 'mnmlajax', plugin_dir_url( __FILE__ ) . 'js.js', null, '5', true );
+} );
 
 add_filter('script_loader_tag', function($tag, $handle) {
 	return ( 'mnmlajax' !== $handle ) ? $tag : str_replace( ' src', ' defer src', $tag );
@@ -56,7 +54,8 @@ add_filter('script_loader_tag', function($tag, $handle) {
 add_action( 'rest_api_init', function () {
 	register_rest_route( 'mnmlajax/v1', '/load', array(
 		'methods' => ['POST','GET'],
-		'callback' => 'mnmlajax_load',
+        'callback' => 'mnmlajax_load',
+        'permission_callback' => '__return_true',
 	) );
 } );
 

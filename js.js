@@ -1,8 +1,8 @@
 (function(){
-var wrapper = document.querySelector('.page-content');
+var wrapper = document.querySelector('#primary');
 if ( ! wrapper ) return;
 wrapper.style.opacity='1';
-wrapper.style.transition='.3s';
+wrapper.style.transition='opacity .3s';
 
 var c1 = 'current-menu-item', c2 = 'current_page_item';
 
@@ -25,30 +25,31 @@ window.onpopstate = function(e){
 };
 
 function getPage(e){
-	e.preventDefault();
-	wrapper.style.opacity='0';
-	document.documentElement.classList.remove('dopen');
-    document.body.classList.remove('mnav-open');
-	var r,
-	a = this,
-	slug = this.pathname.replace(/\//g,''),
-	x = new XMLHttpRequest();
-	x.open('GET','/wp-json/mnmlajax/v1/load/?slug='+slug);
-	x.onload = function(){
-		r=JSON.parse(x.response);
-		if ( r && r.html ){
-		    r.href = a.href;
-		    r.slug = slug;
-//		    r.li = a.parentElement.id;
-			process(r);
-			history.pushState(r,'',r.href);
-		} else {
-			console.log(a.href);
-			// location = a.href;
-		}
-	};
-	x.send();
-
+	if ( ! e.metaKey && ! e.ctrlKey && ! e.altKey ) {
+		e.preventDefault();
+		wrapper.style.opacity='0';
+		document.documentElement.classList.remove('dopen');
+		// document.body.classList.remove('mnav-open');
+		var r,
+		a = this,
+		slug = this.pathname.replace(/\//g,''),
+		x = new XMLHttpRequest();
+		x.open('GET','/wp-json/mnmlajax/v1/load/?slug='+slug);
+		x.onload = function(){
+			r=JSON.parse(x.response);
+			if ( r && r.html ){
+				r.href = a.href;
+				r.slug = slug;
+	//		    r.li = a.parentElement.id;
+				process(r);
+				history.pushState(r,'',r.href);
+			} else {
+				// console.log(a.href);
+				location = a.href;
+			}
+		};
+		x.send();
+	}
 }
 
 function addListener(l){
@@ -73,7 +74,7 @@ function process(r) {
 	for ( var i=0; i < scripts.length; ++i ){
 		var script = document.createElement('script');
 		script.innerHTML = scripts[i].innerHTML;
-		wrapper.removeChild(scripts[i]);
+		scripts[i].parentElement.removeChild(scripts[i]);
 		wrapper.appendChild(script);
 	}
 	addListener( wrapper.querySelectorAll('a[href*="'+location.host+'"]') );
@@ -82,6 +83,6 @@ function process(r) {
 
 // initialize
 replace();
-addListener( document.querySelectorAll('a[href*="'+location.host+'"]:not(.ab-item)') );
+addListener( document.querySelectorAll('a[href*="'+location.host+'"]') );
 
 })();

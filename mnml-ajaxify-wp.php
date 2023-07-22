@@ -43,7 +43,7 @@ xhr.send();
  * Setup JavaScript
  */
 add_action( 'wp_enqueue_scripts', function() {
-	wp_enqueue_script( 'mnmlajax', plugin_dir_url( __FILE__ ) . 'js.js', null, '5', true );
+	wp_enqueue_script( 'mnmlajax', plugin_dir_url( __FILE__ ) . 'js.js', null, null, true );
 } );
 
 add_filter('script_loader_tag', function($tag, $handle) {

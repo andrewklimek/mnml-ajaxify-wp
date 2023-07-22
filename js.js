@@ -1,5 +1,5 @@
 (function(){
-var wrapper = document.querySelector('#primary');
+var wrapper = document.querySelector('.page-content');
 if ( ! wrapper ) return;
 wrapper.style.opacity='1';
 wrapper.style.transition='opacity .3s';
@@ -67,7 +67,7 @@ function process(r) {
 		cur.classList.remove(c2);
 	}
 	// a.parentElement.className += ' '+c1+' '+c2;
-	var l = document.querySelector('#primary-menu [href="'+r.href+'"]');
+	var l = document.querySelector('header [href="'+r.href+'"]');
 	if(l) l.parentElement.className += ' '+c1+' '+c2;
 	document.title = r.title;
 	var scripts = wrapper.getElementsByTagName('script');
